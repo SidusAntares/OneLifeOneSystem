@@ -1,0 +1,30 @@
+# Questa
+work/
+transcript
+modelsim.ini
+vsim_stacktrace.vstf
+*.vstf
+wlft*
+*.wlf
+*.vcd
+*.ucdb
+*.qdb
+
+# Vivado project output
+.Xil/
+*.cache/
+*.runs/
+*.sim/
+
+# Vivado logs, journals, and temporary files
+vivado*.log
+vivado*.jou
+webtalk*.log
+webtalk*.jou
+usage_statistics_webtalk.*
+*.backup.log
+*.backup.jou
+*.str
+*.pb
+*.dmp
+*.tmp

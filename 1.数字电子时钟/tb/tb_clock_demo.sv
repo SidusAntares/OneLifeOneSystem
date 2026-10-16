@@ -128,15 +128,26 @@ module tb_clock_demo #(
             assert_time(12,59,59);
             consume_one_tick();
             assert_time(13,0,0);
-            phase=2;
+            $display("PASS DEMO count: 12:59:58 -> 12:59:59 -> 13:00:00");
+        end
+    endtask
+
+    task automatic demo_midnight;
+        begin
+            // Test-only state injection keeps this independent rollover
+            // waveform short and separate from the daytime carry scene.
+            phase=1;
             @(negedge clk);
             dut.u_time_counter.hour=6'd23;
             dut.u_time_counter.minute=6'd59;
             dut.u_time_counter.second=6'd59;
-            $display("[DEMO count] TEST SETUP: inject 23:59:59 for midnight demonstration");
+            // Allow output-port nets to reflect the injected child registers.
+            #1;
+            assert_time(23,59,59);
+            $display("[DEMO midnight] TEST SETUP: inject 23:59:59; observed transition begins at the next tick");
             consume_one_tick();
             assert_time(0,0,0);
-            $display("PASS DEMO count: 12:59:58 -> 12:59:59 -> 13:00:00; 23:59:59 -> 00:00:00");
+            $display("PASS DEMO midnight: 23:59:59 -> 00:00:00");
         end
     endtask
 
@@ -233,6 +244,7 @@ module tb_clock_demo #(
         reset_all();
         if      (scene=="divider") demo_divider();
         else if (scene=="count")   demo_count();
+        else if (scene=="midnight") demo_midnight();
         else if (scene=="keys")    demo_keys();
         else if (scene=="display") demo_display();
         else if (scene=="alarm")   demo_alarm();
